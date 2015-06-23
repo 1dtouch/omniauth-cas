@@ -125,7 +125,11 @@ module OmniAuth
       end
 
       def extract_url
-        url = Addressable::URI.parse(options.delete('url'))
+        if options['url'].is_a?(Proc)
+          url = Addressable::URI.parse(options.delete('url').call(request))
+        else
+          url = Addressable::URI.parse(options.delete('url'))
+        end
         options.merge!(
           'host' => url.host,
           'port' => url.port,
@@ -135,7 +139,7 @@ module OmniAuth
       end
 
       def validate_cas_setup
-        if options.host.nil? || options.login_url.nil?
+        if options.host.nil? || fetch_login_url.nil?
           raise ArgumentError.new(":host and :login_url MUST be provided")
         end
       end
@@ -152,7 +156,7 @@ module OmniAuth
       def service_validate_url(service_url, ticket)
         service_url = Addressable::URI.parse(service_url)
         service_url.query_values = service_url.query_values.tap { |qs| qs.delete('ticket') }
-        cas_url + append_params(options.service_validate_url, {
+        cas_url + append_params(fetch_service_validate_url, {
           service: service_url.to_s,
           ticket: ticket
         })
@@ -164,7 +168,7 @@ module OmniAuth
       #
       # @return [String] a URL like `http://cas.mycompany.com/login?service=...`
       def login_url(service)
-        cas_url + append_params(options.login_url, { service: service })
+        cas_url + append_params(fetch_login_url, { service: service })
       end
 
       # Adds URL-escaped +parameters+ to +base+.
@@ -187,6 +191,18 @@ module OmniAuth
       end
 
     private
+
+      def fetch_service_validate_url
+        options.service_validate_url.is_a?(Proc) ? options.service_validate_url.call(request) : options.service_validate_url
+      end
+
+      def fetch_login_url
+        options.login_url.is_a?(Proc) ? options.login_url.call(request) : options.login_url
+      end
+
+      def fetch_logout_url
+        options.logout_url.is_a?(Proc) ? options.logout_url.call(request) : options.logout_url
+      end
 
       def fetch_raw_info(ticket)
         ticket_user_info = validate_service_ticket(ticket).user_info
