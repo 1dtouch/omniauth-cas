@@ -42,7 +42,7 @@ end
 
 OmniAuth CAS requires at least one of the following two configuration options:
 
-  * `url` - Defines the URL of your CAS server (i.e. `http://example.org:8080`)
+  * `url` - Defines the URL of your CAS server (i.e. `http://example.org:8080`). Can be set to a callback lambda with one parameter (the request variable).
   * `host` - Defines the host of your CAS server (i.e. `example.org`).
 
 #### Optional
@@ -51,10 +51,10 @@ Other configuration options:
 
   * `port` - The port to use for your configured CAS `host`. Optional if using `url`.
   * `ssl` - TRUE to connect to your CAS server over SSL. Optional if using `url`.
-  * `service_validate_url` - The URL to use to validate a user. Defaults to `'/serviceValidate'`.
+  * `service_validate_url` - The URL to use to validate a user. Defaults to `'/serviceValidate'`. Can be set to a callback lambda with one parameter (the request variable).
   * `callback_url` - The URL custom URL path which CAS uses to call back to the service.  Defaults to `/users/auth/cas/callback`.
-  * `logout_url` - The URL to use to logout a user. Defaults to `'/logout'`.
-  * `login_url` - Defines the URL used to prompt users for their login information. Defaults to `/login` If no `host` is configured, the host application's domain will be used.
+  * `logout_url` - The URL to use to logout a user. Defaults to `'/logout'`. Can be set to a callback lambda with one parameter (the request variable).
+  * `login_url` - Defines the URL used to prompt users for their login information. Defaults to `/login` If no `host` is configured, the host application's domain will be used. Can be set to a callback lambda with one parameter (the request variable).
   * `uid_field` - The user data attribute to use as your user's unique identifier. Defaults to `'user'` (which usually contains the user's login name).
   * `ca_path` - Optional when `ssl` is `true`. Sets path of a CA certification directory. See [Net::HTTP][net_http] for more details.
   * `disable_ssl_verification` - Optional when `ssl` is true. Disables verification.
