@@ -125,7 +125,7 @@ module OmniAuth
       end
 
       def extract_url
-        if options['url'].is_a?(Proc)
+        if options['url'].respond_to?(:call)
           url = Addressable::URI.parse(options.delete('url').call(request))
         else
           url = Addressable::URI.parse(options.delete('url'))
@@ -193,15 +193,15 @@ module OmniAuth
     private
 
       def fetch_service_validate_url
-        options.service_validate_url.is_a?(Proc) ? options.service_validate_url.call(request) : options.service_validate_url
+        options.service_validate_url.respond_to?(:call) ? options.service_validate_url.call(request) : options.service_validate_url
       end
 
       def fetch_login_url
-        options.login_url.is_a?(Proc) ? options.login_url.call(request) : options.login_url
+        options.login_url.respond_to?(:call) ? options.login_url.call(request) : options.login_url
       end
 
       def fetch_logout_url
-        options.logout_url.is_a?(Proc) ? options.logout_url.call(request) : options.logout_url
+        options.logout_url.respond_to?(:call) ? options.logout_url.call(request) : options.logout_url
       end
 
       def fetch_raw_info(ticket)
