@@ -18,6 +18,7 @@ module OmniAuth
 
       option :name, :cas # Required property by OmniAuth::Strategy
 
+      option :url, nil
       option :host, nil
       option :port, nil
       option :path, nil
@@ -126,9 +127,9 @@ module OmniAuth
 
       def extract_url
         if options['url'].respond_to?(:call)
-          url = Addressable::URI.parse(options.delete('url').call(request))
+          url = Addressable::URI.parse(options['url'].call(request))
         else
-          url = Addressable::URI.parse(options.delete('url'))
+          url = Addressable::URI.parse(options['url'])
         end
         options.merge!(
           'host' => url.host,
