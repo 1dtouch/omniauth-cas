@@ -38,6 +38,7 @@ module OmniAuth
       option :fetch_raw_info,       Proc.new { Hash.new }
       # Make all the keys configurable with some defaults set here
       option :uid_field, 'user'
+      option :bibid_field, 'bibid'
       option :name_key, 'name'
       option :email_key, 'email'
       option :nickname_key, 'user'
@@ -51,6 +52,7 @@ module OmniAuth
       AuthHashSchemaKeys = %w{name email nickname first_name last_name location image phone}
       info do
         prune!({
+          bibid: raw_info[options[:bibid_key].to_s],
           name: raw_info[options[:name_key].to_s],
           email: raw_info[options[:email_key].to_s],
           nickname: raw_info[options[:nickname_key].to_s],
@@ -84,6 +86,7 @@ module OmniAuth
           return fail!(:no_ticket, MissingCASTicket.new('No CAS Ticket')) unless @ticket
           fetch_raw_info(@ticket)
           return fail!(:invalid_ticket, InvalidCASTicket.new('Invalid CAS Ticket')) if raw_info.empty?
+          puts raw_info
           super
         end
       end
