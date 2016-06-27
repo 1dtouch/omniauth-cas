@@ -44,6 +44,7 @@ module OmniAuth
         # returns nil if given nil
         def parse_user_info(node)
           return nil if node.nil?
+          node.content = "" if node.try(:content) && node.content.blank?
           {}.tap do |hash|
             node.children.each do |e|
               node_name = e.name.sub(/^cas:/, '')
