@@ -49,7 +49,7 @@ module OmniAuth
       option :phone_key, 'phone'
 
       # As required by https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema
-      AuthHashSchemaKeys = %w{name email nickname first_name last_name location image phone}
+      AuthHashSchemaKeys = %w{bibid name email nickname first_name last_name location image phone}
       info do
         prune!({
           bibid: raw_info[options[:bibid_key].to_s],
